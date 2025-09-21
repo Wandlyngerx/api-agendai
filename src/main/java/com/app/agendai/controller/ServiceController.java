@@ -36,7 +36,7 @@ public class ServiceController {
     }
 
     @PutMapping("/update/{id}")
-    public String update(@PathVariable UUID id, @RequestBody ServiceRequest serviceRequest, @AuthenticationPrincipal UserDetails userDetails){
+    public String updateService(@PathVariable UUID id, @RequestBody ServiceRequest serviceRequest, @AuthenticationPrincipal UserDetails userDetails){
 
         return service.atualizar(id, serviceRequest, userDetails);
     }

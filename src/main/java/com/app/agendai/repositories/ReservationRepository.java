@@ -6,12 +6,13 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Repository
 public interface ReservationRepository extends JpaRepository<Reservation, UUID> {
 
     List<Reservation> findByDateAndServiceEntityEnterpriseId(LocalDate date, UUID enterpriseId);
-    List<Reservation> findByClientId(UUID id);
-    List<Reservation> findByServiceEntityId(UUID id);
+    Optional<List<Reservation>> findByClientId(UUID id);
+    Optional<List<Reservation>> findByServiceEntityId(UUID id);
 }

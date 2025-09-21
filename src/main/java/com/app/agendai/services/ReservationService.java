@@ -1,10 +1,10 @@
 package com.app.agendai.services;
 
 import com.app.agendai.dtos.ReservationRequest;
+import com.app.agendai.dtos.ReservationResponse;
 import com.app.agendai.entities.Reservation;
 import com.app.agendai.entities.Client;
 import com.app.agendai.entities.ServiceEntity;
-import com.app.agendai.entities.User;
 import com.app.agendai.exceptions.custons.BookingHourInvalidException;
 import com.app.agendai.exceptions.custons.BookingHourReservedException;
 import com.app.agendai.exceptions.custons.NotFoundException;
@@ -33,7 +33,7 @@ public class ReservationService {
     @Autowired
     private UserRepository userRepository;
 
-    public com.app.agendai.dtos.ReservationResponse save(UUID id, ReservationRequest reservationRequest, UserDetails userDetails) {
+    public ReservationResponse save(UUID id, ReservationRequest reservationRequest, UserDetails userDetails) {
 
         ServiceEntity serviceEntity = serviceRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("servcio "+ id +" nao encontrado" ));
@@ -71,46 +71,47 @@ public class ReservationService {
         reservation.setServiceEntity(serviceEntity);
 
         reservationRepository.save(reservation);
-        return new com.app.agendai.dtos.ReservationResponse(reservation.getId(), reservation.getDate(), reservation.getCheckin(), reservation.getCheckout(), reservation.getClient().getId(), reservation.getServiceEntity().getId());
+        return new ReservationResponse(reservation.getId(), reservation.getDate(), reservation.getCheckin(), reservation.getCheckout(), reservation.getClient().getId(), reservation.getServiceEntity().getId());
 
 
     }
 
-public List<com.app.agendai.dtos.ReservationResponse> findByClient(UUID id){
+public List<ReservationResponse> findByClient(UUID id){
         boolean exist = clientRepository.existsById(id);
         if (!exist){
             throw new NotFoundException("nao foi encontrado um cliente com id " + id );
         }
 
-        List<Reservation> reservations = reservationRepository.findByClientId(id);
+        List<Reservation> reservations = reservationRepository.findByClientId(id).orElseThrow(()-> new NotFoundException(("nenhuma reserva encontrada no ususario id " +id)));
 
         return bookingResponseList(reservations);
 }
 
 
-    public List<com.app.agendai.dtos.ReservationResponse> findAll(){
+    public List<ReservationResponse> findAll(){
         List<Reservation> reservations = reservationRepository.findAll();
 
         return bookingResponseList(reservations);
     }
 
-    public List<com.app.agendai.dtos.ReservationResponse> findByService(UUID id){
+    public List<ReservationResponse> findByService(UUID id){
         boolean exist = serviceRepository.existsById(id);
         if (!exist){
             throw new NotFoundException("servico com id " + id+ "nao encontrado");
         }
 
 
-        List<Reservation> reservations = reservationRepository.findByServiceEntityId(id);
+        List<Reservation> reservations = reservationRepository.findByClientId(id).orElseThrow(()-> new NotFoundException(("nenhuma reserva encontrada no servico id " +id)));
+
 
         return bookingResponseList(reservations);
     }
 
 
 
-    private List<com.app.agendai.dtos.ReservationResponse> bookingResponseList(List<Reservation> reservations) {
+    private List<ReservationResponse> bookingResponseList(List<Reservation> reservations) {
         return reservations.stream()
-                .map(booking -> new com.app.agendai.dtos.ReservationResponse(
+                .map(booking -> new ReservationResponse(
                         booking.getId(),
                         booking.getDate(),
                         booking.getCheckin(),

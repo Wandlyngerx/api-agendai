@@ -23,16 +23,16 @@ public class ReservationController {
 
 
     @PostMapping("/{id}")
-    public ResponseEntity<ReservationResponse> saveBooking (@PathVariable UUID id, @RequestBody ReservationRequest reservationRequest, @AuthenticationPrincipal UserDetails userDetails){
+    public ResponseEntity<ReservationResponse> saveReservation (@PathVariable UUID id, @RequestBody ReservationRequest reservationRequest, @AuthenticationPrincipal UserDetails userDetails){
         return ResponseEntity.status(HttpStatus.CREATED).body(reservationService.save(id,reservationRequest, userDetails));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<List<ReservationResponse>> findBookingByClient(@PathVariable UUID id){
+    public ResponseEntity<List<ReservationResponse>> findReservationByClient(@PathVariable UUID id){
         return ResponseEntity.status(HttpStatus.OK).body(reservationService.findByClient(id));
     }
     @GetMapping("/service/{id}")
-    public ResponseEntity<List<ReservationResponse>> findBookingByServcie(@PathVariable UUID id){
+    public ResponseEntity<List<ReservationResponse>> findReservationByServcie(@PathVariable UUID id){
         return ResponseEntity.status(HttpStatus.OK).body(reservationService.findByService(id));
 }
 }

@@ -32,9 +32,9 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.POST, "/agendai/auth/register/enterprise").permitAll()
                         .requestMatchers(HttpMethod.GET, "/agendai/client/{id}").hasRole("USER")
                         .requestMatchers(HttpMethod.POST, "/agendai/reservation/{id}").hasRole("USER")
-                        .requestMatchers(HttpMethod.GET, "/agendai/reservation/{id}").hasRole("USER") //busca reserva pelo id do usuario
-                        .requestMatchers(HttpMethod.GET, "/agendai/reservation/service/{id}").hasRole("ADMIN")// buscca reserva pelo id de um servico
-                        .requestMatchers(HttpMethod.POST, "/agendai/service").hasRole("ADMIN")//crie um servico
+                        .requestMatchers(HttpMethod.GET, "/agendai/reservation/{id}").hasRole("USER")
+                        .requestMatchers(HttpMethod.GET, "/agendai/reservation/service/{id}").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/agendai/service").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/agendai/service/update/{id}").hasRole("ADMIN")
                         .anyRequest()
                         .authenticated())
